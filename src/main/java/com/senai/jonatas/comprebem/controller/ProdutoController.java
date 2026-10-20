@@ -5,6 +5,8 @@ import com.senai.jonatas.comprebem.dto.ProdutoResponseDTO;
 import com.senai.jonatas.comprebem.service.ProdutoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,12 +20,19 @@ public class ProdutoController {
     private final ProdutoService produtoService;
 
     @GetMapping
-    public List<ProdutoResponseDTO> findAll() {
-        return produtoService.findAll();
+    // Usa página zero e 20 itens por padrão.
+    public Page<ProdutoResponseDTO> findAll(
+            @RequestParam(defaultValue = "") String busca,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+
+        // Impede que uma requisição retorne mais de 50 produtos.
+        int tamanho = Math.min(size, 50);
+        return produtoService.findAll(busca, PageRequest.of(page, tamanho));
     }
 
     @GetMapping("/{id}")
-    public ProdutoResponseDTO findById(UUID id) {
+    public ProdutoResponseDTO findById(@PathVariable UUID id) {
         return produtoService.findById(id);
     }
 
