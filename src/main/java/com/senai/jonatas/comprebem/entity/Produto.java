@@ -1,12 +1,10 @@
 package com.senai.jonatas.comprebem.entity;
 
 import com.senai.jonatas.comprebem.dto.ProdutoRequestDTO;
-import com.senai.jonatas.comprebem.dto.ProdutoResponseDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 import java.util.UUID;
 
 @Data
