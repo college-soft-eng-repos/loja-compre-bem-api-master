@@ -5,6 +5,8 @@ import com.senai.jonatas.comprebem.dto.ProdutoResponseDTO;
 import com.senai.jonatas.comprebem.entity.Produto;
 import com.senai.jonatas.comprebem.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,11 +33,9 @@ public class ProdutoService {
         return ProdutoResponseDTO.toDto(produto);
     }
 
-    public List<ProdutoResponseDTO> findByFiltro(String filtro) {
-        return produtoRepository.findByFiltro(filtro)
-                .stream()
-                .map(ProdutoResponseDTO::toDto)
-                .toList();
+    public Page<ProdutoResponseDTO> findByFiltro(String filtro, Pageable pageable) {
+        return produtoRepository.findByFiltro(filtro, pageable)
+                .map(ProdutoResponseDTO::toDto);
     }
 
     public ProdutoResponseDTO save(ProdutoRequestDTO produto) {

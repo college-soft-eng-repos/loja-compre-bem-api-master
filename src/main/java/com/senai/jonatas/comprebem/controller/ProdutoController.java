@@ -6,6 +6,8 @@ import com.senai.jonatas.comprebem.service.ProdutoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,13 +26,16 @@ public class ProdutoController {
     }
 
     @GetMapping("/{id}")
-    public ProdutoResponseDTO findById(UUID id) {
+    public ProdutoResponseDTO findById(@PathVariable UUID id) {
         return produtoService.findById(id);
     }
 
     @GetMapping("/filtro")
-    public List<ProdutoResponseDTO> findByFiltro(String filtro) {
-        return produtoService.findByFiltro(filtro);
+    public Page<ProdutoResponseDTO> findByFiltro(
+            @RequestParam(required = false, defaultValue = "") String filtro,
+            Pageable pageable
+    ) {
+        return produtoService.findByFiltro(filtro, pageable);
     }
 
     @PostMapping
@@ -43,8 +48,8 @@ public class ProdutoController {
         return produtoService.update(produtoId, produto);
     }
 
-    @DeleteMapping
-    public void delete(UUID produtoId) {
-        produtoService.delete(produtoId);
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable UUID id) {
+        produtoService.delete(id);
     }
 }
